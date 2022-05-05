@@ -1,13 +1,24 @@
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
-        System.out.println(engine.search("бизнес"));
+//        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
+//        System.out.println(engine.search("бизнес"));
 
-        // здесь создайте сервер, который отвечал бы на нужные запросы
-        // слушать он должен порт 8989
-        // отвечать на запросы /{word} -> возвращённое значение метода search(word) в JSON-формате
+        while (true) {
+            try (PdfSearchServer srv = new PdfSearchServer()) {
+                int clientPort = srv.start();
+                System.out.println("New connection has started on port: " + clientPort);
+                srv.send("Write a word to search for: ");
+                String word = srv.recieve();
+                srv.sendSearchResult(word);
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+                System.out.println(e.getLocalizedMessage());
+                System.exit(0);
+            }
+        }
     }
 }
