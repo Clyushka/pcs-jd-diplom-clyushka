@@ -8,7 +8,6 @@ public class ClientMain {
 
         try {
             Client client = new Client(ipAddress, serverPort);
-            System.out.println(client.recieve());
             Scanner consoleScanner = new Scanner(System.in);
             client.send(consoleScanner.nextLine());
             System.out.println(client.recieve());

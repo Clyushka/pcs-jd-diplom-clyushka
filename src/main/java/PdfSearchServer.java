@@ -1,11 +1,9 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class PdfSearchServer implements AutoCloseable {
@@ -19,11 +17,11 @@ public class PdfSearchServer implements AutoCloseable {
         engine = new BooleanSearchEngine(new File("pdfs"));
     }
 
-    public int start() throws IOException {
+    public Socket start() throws IOException {
         Socket clientSocket = serverSocket.accept();
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream(), true);
-        return clientSocket.getPort();
+        return clientSocket;
     }
 
     public String recieve() throws IOException {
